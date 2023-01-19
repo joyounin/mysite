@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.douzone.mysite.dao.GuestbookDao;
 import com.douzone.mysite.vo.GuestbookVo;
 import com.douzone.web.mvc.Action;
+import com.douzone.web.util.MvcUtil;
 
 public class GuestbookInsertAction implements Action {
 
@@ -22,9 +23,10 @@ public class GuestbookInsertAction implements Action {
 		vo.setName(name);
 		vo.setPassword(password);
 		vo.setMessage(message);
+		
 		new GuestbookDao().insert(vo);
 		
-		response.sendRedirect(request.getContextPath() + "/guestbook?a=list");
+		MvcUtil.redirect(request.getContextPath() + "/guestbook?a=list",request, response);
 	}
 
 }
