@@ -1,4 +1,8 @@
+<%@ page import="com.douzone.mysite.vo.UserVo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<% 
+	UserVo UserVo = (UserVo)session.getAttribute("gender");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,8 +29,19 @@
 					
 					<fieldset>
 						<legend>성별</legend>
+					<%
+						if("female".equals(UserVo.getGender())){
+					%>
 						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
 						<label>남</label> <input type="radio" name="gender" value="male">
+					<%
+						} else{
+					%>
+						<label>여</label> <input type="radio" name="gender" value="female">
+						<label>남</label> <input type="radio" name="gender" value="male" checked="checked">
+					<%
+						}
+					%>
 					</fieldset>
 					
 					<input type="submit" value="수정하기">

@@ -28,14 +28,18 @@ public class UpdateFormAction implements Action {
 			return;
 		}
 		////////////////////////////
-		
 		// 구현 하기
-		// UserVo vo = new UserDao().findByNo(authUser.getNo());
-		// where session 에 있는 값 동시에 바꾸기
-		// password 있으면 이름,성별,비밀번호 변경, 없으면 이름,성별만 변경 dao에 업데이트 2개 만들기
-		// 업데이트폼으로 리다이렉트로 보내기
-		// 이름 이메일 성별 vo에 넣기
+		UserVo vo = new UserDao().findByNo(authUser.getNo());
+		
 		request.setAttribute("vo", vo);
+		
+		// where session 에 있는 값 동시에 바꾸기
+		UserVo voup1 = new UserDao().userUpdate(authUser.getNo(), authUser.getName(), authUser.getGender());
+		request.setAttribute("voup1", voup1);
+		
+//		UserVo voup2 = new UserDao().userUpdate(authUser.getNo(), authUser.getName(), authUser.getPassword(), authUser.getGender());
+//		request.setAttribute("voup2", voup2);
+		
 		MvcUtil.forward("user/updateform", request, response);
 	}
 

@@ -52,7 +52,7 @@ public class UserDao {
 		try {
 			conn = getConnection();
 			
-			String sql = "select no, name from user where email = ? and password = password(?);";
+			String sql = "select no, name from user where email = ? and password = password(?)";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getEmail());
@@ -87,6 +87,139 @@ public class UserDao {
 		return result;
 	}
 	
+	public UserVo findByNo(Long no) {
+		UserVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "select no, name, password, gender from user where no = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = new UserVo();
+				
+				Long no1 = rs.getLong(1);
+				String name = rs.getString(2);
+				String password = rs.getString(3);
+				String gender = rs.getString(4);
+				
+				result.setNo(no1);
+				result.setName(name);
+				result.setName(password);
+				result.setName(gender);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public UserVo userUpdate(Long no, String name, String gender) {
+		UserVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = getConnection();
+			
+			String sql = " update user set name = ?, gender = ?"
+					+ "     where no = no";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, name.toString());
+			pstmt.setString(2, gender.toString());
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = new UserVo();
+				
+				Long no1 = rs.getLong(1);
+				
+				result.setNo(no1);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public UserVo userUpdate(Long no, String name, String password, String gender) {
+		UserVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = getConnection();
+			
+			String sql = " update user set name = ?, password = ?,  gender = ?"
+					+ "     where no= ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, name.toString());
+			pstmt.setString(2, password.toString());
+			pstmt.setString(3, gender.toString());
+			pstmt.setLong(4, no.longValue());
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = new UserVo();
+				
+				Long no1 = rs.getLong(1);
+				
+				result.setNo(no1);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		
@@ -100,4 +233,9 @@ public class UserDao {
 		
 		return conn;
 	}
+
+
+
+
+
 }
