@@ -1,7 +1,7 @@
 <%@ page import="com.douzone.mysite.vo.UserVo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% 
-	UserVo UserVo = (UserVo)session.getAttribute("gender");
+	UserVo userVo = (UserVo)request.getAttribute("uservo");
 %>
 <!DOCTYPE html>
 <html>
@@ -19,10 +19,10 @@
 				<form id="join-form" name="joinForm" method="post" action="<%=request.getContextPath() %>/user">
 					<input type='hidden' name="a" value="update">
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="">
-
+					<input id="name" name="name" type="text" value="<%= userVo.getName()%>">
+				
 					<label class="block-label" for="email">이메일</label>
-					<h4>3723519@naver.com</h4>
+					<input name="email" type="text" value="<%=userVo.getEmail()%>" > 
 					
 					<label class="block-label">패스워드</label>
 					<input name="password" type="password" value="">
@@ -30,7 +30,7 @@
 					<fieldset>
 						<legend>성별</legend>
 					<%
-						if("female".equals(UserVo.getGender())){
+						if("female".equals(userVo.getGender())){
 					%>
 						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
 						<label>남</label> <input type="radio" name="gender" value="male">

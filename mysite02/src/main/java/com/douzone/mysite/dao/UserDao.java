@@ -96,7 +96,7 @@ public class UserDao {
 		try {
 			conn = getConnection();
 			
-			String sql = "select no, name, password, gender from user where no = ?";
+			String sql = "select no, name, email, password, gender from user where no = ?";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setLong(1, no);
@@ -107,13 +107,15 @@ public class UserDao {
 				
 				Long no1 = rs.getLong(1);
 				String name = rs.getString(2);
-				String password = rs.getString(3);
-				String gender = rs.getString(4);
+				String email = rs.getString(3);
+				String password = rs.getString(4);
+				String gender = rs.getString(5);
 				
 				result.setNo(no1);
 				result.setName(name);
-				result.setName(password);
-				result.setName(gender);
+				result.setEmail(email);
+				result.setPassword(password);
+				result.setGender(gender);
 			}
 			
 		} catch (SQLException e) {
@@ -134,7 +136,57 @@ public class UserDao {
 		return result;
 	}
 	
-	public UserVo userUpdate(Long no, String name, String gender) {
+	public UserVo userpUpdate(UserVo vo) {
+		UserVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = getConnection();
+			
+			String sql = " update user set name = ?, password = password(?),  gender = ?"
+					+ "     where no= ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, vo.getName());
+			pstmt.setString(2, vo.getPassword());
+			pstmt.setString(3, vo.getGender());
+			pstmt.setLong(4, vo.getNo());
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = new UserVo();
+			
+				String name = rs.getString(1);
+				String password = rs.getString(2);
+				String gender = rs.getString(3);
+				Long no = rs.getLong(4);
+				
+				result.setName(name);
+				result.setPassword(password);
+				result.setGender(gender);
+				result.setNo(no);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public UserVo userUpdate(UserVo vo) {
 		UserVo result = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -143,63 +195,24 @@ public class UserDao {
 			conn = getConnection();
 			
 			String sql = " update user set name = ?, gender = ?"
-					+ "     where no = no";
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, name.toString());
-			pstmt.setString(2, gender.toString());
-			
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				result = new UserVo();
-				
-				Long no1 = rs.getLong(1);
-				
-				result.setNo(no1);
-			}
-			
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-				
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-	
-	public UserVo userUpdate(Long no, String name, String password, String gender) {
-		UserVo result = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-			
-			String sql = " update user set name = ?, password = ?,  gender = ?"
 					+ "     where no= ?";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, name.toString());
-			pstmt.setString(2, password.toString());
-			pstmt.setString(3, gender.toString());
-			pstmt.setLong(4, no.longValue());
+			pstmt.setString(1, vo.getName());
+			pstmt.setString(2, vo.getGender());
+			pstmt.setLong(3, vo.getNo());
 			
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				result = new UserVo();
+			
+				String name = rs.getString(1);
+				String gender = rs.getString(2);
+				Long no = rs.getLong(3);
 				
-				Long no1 = rs.getLong(1);
-				
-				result.setNo(no1);
+				result.setName(name);
+				result.setGender(gender);
+				result.setNo(no);
 			}
 			
 		} catch (SQLException e) {
@@ -233,9 +246,4 @@ public class UserDao {
 		
 		return conn;
 	}
-
-
-
-
-
 }
