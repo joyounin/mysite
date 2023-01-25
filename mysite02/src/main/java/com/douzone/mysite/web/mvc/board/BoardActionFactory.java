@@ -12,10 +12,14 @@ public class BoardActionFactory extends ActionFactory {
 		
 		if("writeform".equals(actionName)) {
 			action = new WriteFormAction();
-		} else if("list".equals(actionName)) {
-			action = new ListAction();
-		} else if("등록".equals(actionName)) {
-			action = new NewBookAction();
+		} else if("view".equals(actionName)) {
+			action = new ViewFormAction();
+		} else if("write".equals(actionName)) {
+			action = new WriteAction();
+		} else if("delete".equals(actionName)) {
+			action = new DeleteAction();
+		}else if("modify".equals(actionName)) {
+			action = new ModifyFormAction();
 		}else {
 			action = new ListAction();
 		}

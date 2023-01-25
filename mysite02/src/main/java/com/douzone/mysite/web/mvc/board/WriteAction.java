@@ -11,25 +11,20 @@ import com.douzone.mysite.vo.BoardVo;
 import com.douzone.web.mvc.Action;
 import com.douzone.web.util.MvcUtil;
 
-public class NewBookAction implements Action {
+public class WriteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		String shit = request.getParameter("hit");
-		Integer hit = Integer.parseInt(shit);
-		String sg = request.getParameter("groupno");
-		Integer groupno = Integer.parseInt(sg);
-		String so = request.getParameter("orderno");
-		Integer orderno = Integer.parseInt(so);
-		String sd = request.getParameter("depth");
-		Integer depth = Integer.parseInt(sd);
+		String sno = request.getParameter("userno");
+		Long userno = Long.parseLong(sno);
+		
 		
 		BoardVo vo = new BoardVo();
 		vo.setTitle(title);
 		vo.setContents(content);
-		vo.setHit(hit);
+		vo.setUserno(userno);
 		
 		new BoardDao().insert(vo);
 		

@@ -34,13 +34,15 @@
 					<tr>
 						<td>[${count - status.index }]</td>
 						<td style="text-align:left; padding-left:0px" >
-							<img src="${pageContext.request.contextPath }/assets/images/reply.png">
-							<a href="">${vo.title }</a>
+							<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a>
 						</td>
 						<td>${vo.uname }</td>
 						<td>${vo.hit}</td>
 						<td>${vo.regdate }</td>
-						<td><a href="" class="del">삭제</a></td>
+						<c:if test="${authUser.no == vo.userno}">
+								<td><a href="${pageContext.request.contextPath }/board?a=delete" class="del">삭제</a></td>
+						</c:if>	
+						
 					</tr>
 					</c:forEach>
 					
@@ -62,7 +64,7 @@
 				<!-- pager 추가 -->
 				<c:if test="${not empty authUser }">
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath }/board?a=writeform" id="new-book">글쓰기</a>
+					<a href="${pageContext.request.contextPath }/board?a=writeform&userno=${authUser.no }" id="new-book">글쓰기</a>
 				</div>
 				</c:if>				
 			</div>

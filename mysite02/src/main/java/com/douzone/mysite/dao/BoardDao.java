@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.douzone.mysite.vo.BoardVo;
+import com.douzone.mysite.vo.UserVo;
 
 public class BoardDao {
 	public List<BoardVo> findlist() {
@@ -21,19 +22,22 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 			
-			String sql ="  select a.title, b.name, a.hit, a.reg_date"
-					+ "from board a, user b"
-					+ "where a.user_no = b.no";
+			String sql ="  select a.no, a.title, a.contents, b.name, a.hit, a.reg_date, a.user_no "
+					+ "from board a, user b "
+					+ "where a.user_no = b.no "
+					+ "order by a.no desc ";
 			pstmt = conn.prepareStatement(sql);
 
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				BoardVo vo = new BoardVo();
-				vo.setTitle(rs.getString(1));
-				vo.setUname(rs.getString(2));
-				vo.setHit(rs.getInt(3));
-				vo.setRegdate(rs.getString(4));
-				
+				vo.setNo(rs.getLong(1));
+				vo.setTitle(rs.getString(2));
+				vo.setContents(rs.getString(3));
+				vo.setUname(rs.getString(4));
+				vo.setHit(rs.getInt(5));
+				vo.setRegdate(rs.getString(6));
+				vo.setUserno(rs.getLong(7));
 				result.add(vo);
 			}
 			
@@ -59,6 +63,53 @@ public class BoardDao {
 		
 		return result;
 	}
+	public BoardVo findByNo(Long no) {
+		BoardVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "select no, title, contents from board where no = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, no);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = new BoardVo();
+				
+				Long no1 = rs.getLong(1);
+				String title = rs.getString(2);
+				String contents = rs.getString(3);
+				
+				result.setNo(no1);
+				result.setTitle(title);
+				result.setContents(contents);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+			
 	public void insert(BoardVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -66,16 +117,12 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 			
-			String sql = "insert into board values(null, ?, ?, ?, now(), max(g_no)+1, ?, ?, userno)";
+			String sql = "insert into board values(null, ?, ?, 0, now(), 1, 1, 0, ?)";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContents());
-			pstmt.setInt(3, vo.getHit());
-			pstmt.setInt(4, vo.getGroupno());
-			pstmt.setInt(5, vo.getOrderno());
-			pstmt.setInt(6, vo.getDepth());
-			
+			pstmt.setLong(3, vo.getUserno());
 			
 			pstmt.executeUpdate();
 			
@@ -95,6 +142,39 @@ public class BoardDao {
 			}
 		}
 	}
+	public void deletebyno(Long userno, Long no) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "delete from board where user_no=? and no=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, userno);
+			pstmt.setLong(2, no);
+			
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		
@@ -108,6 +188,7 @@ public class BoardDao {
 		
 		return conn;
 	}
+
 
 
 }
