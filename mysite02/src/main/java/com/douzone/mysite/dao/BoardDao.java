@@ -158,49 +158,30 @@ public class BoardDao {
 	}
 	public void replyinsert(BoardVo vo) {
 		Connection conn = null;
-		PreparedStatement pstmt1 = null;
-		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt = null;
+		
 		try {
-			conn.setAutoCommit(false);
 			conn = getConnection();
-			String sql1 = "update board "
-					+ "   set o_no = o_no + 1 "
-					+ " where g_no = ? and o_no > ?)";
-			pstmt1 = conn.prepareStatement(sql1);
 			
-			pstmt1.setInt(1, vo.getGroupno());
-			pstmt1.setInt(2, vo.getOrderno());
+			String sql = "insert into board values(null, ?, ?, ?, now(), ?, ?, ?, ? )";
+			pstmt = conn.prepareStatement(sql);
 			
-			pstmt1.executeUpdate();
-			conn.commit();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		try {
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContents());
+			pstmt.setInt(3, vo.getHit());
+			pstmt.setInt(4, vo.getGroupno());
+			pstmt.setInt(5, vo.getOrderno());
+			pstmt.setInt(6, vo.getDepth());
+			pstmt.setLong(7, vo.getUserno());
 			
-			
-			String sql2 = "insert into board values(null, ?, ?, ?, now(), ?, ?, ?, ? )";
-			pstmt2 = conn.prepareStatement(sql2);
-			
-			pstmt2.setString(1, vo.getTitle());
-			pstmt2.setString(2, vo.getContents());
-			pstmt2.setInt(3, vo.getHit());
-			pstmt2.setInt(4, vo.getGroupno());
-			pstmt2.setInt(5, vo.getOrderno());
-			pstmt2.setInt(6, vo.getDepth());
-			pstmt2.setLong(7, vo.getUserno());
-			
-			pstmt2.executeUpdate();
+			pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
 			try {
-				if(pstmt1 != null) {
-					pstmt1.close();
-				} 
-				if(pstmt2 != null) {
-					pstmt2.close();
+				if(pstmt != null) {
+					pstmt.close();
 				}
 				
 				if(conn != null) {

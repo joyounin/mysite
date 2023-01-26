@@ -32,6 +32,7 @@ public class ReplyAction implements Action {
 		vo.setOrderno(vo.getOrderno()+1);
 		vo.setDepth(vo.getDepth()+1);
 		
+		new BoardDao().replyupdate(vo);
 		new BoardDao().replyinsert(vo);
 		
 		MvcUtil.redirect(request.getContextPath() + "/board?a=list",request, response);
