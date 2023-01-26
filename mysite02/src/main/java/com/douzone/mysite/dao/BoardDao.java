@@ -74,7 +74,7 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 			
-			String sql = " select no, title, contents, user_no, g_no, o_no, depth "
+			String sql = " select no, title, contents, user_no, g_no, o_no, depth, hit "
 					+ "      from board "
 					+ "     where no = ? ";
 			pstmt = conn.prepareStatement(sql);
@@ -92,6 +92,7 @@ public class BoardDao {
 				Integer groupno = rs.getInt(5);
 				Integer orderno = rs.getInt(6);
 				Integer depth = rs.getInt(7);
+				Integer hit = rs.getInt(8);
 				
 				result.setNo(no1);
 				result.setTitle(title);
@@ -100,6 +101,7 @@ public class BoardDao {
 				result.setGroupno(groupno);
 				result.setOrderno(orderno);
 				result.setDepth(depth);
+				result.setHit(hit);
 				
 			}
 			
@@ -161,15 +163,16 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 			
-			String sql = "insert into board values(null, ?, ?, 0, now(), ?, ?, ?, ? )";
+			String sql = "insert into board values(null, ?, ?, ?, now(), ?, ?, ?, ? )";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContents());
-			pstmt.setInt(3, vo.getGroupno());
-			pstmt.setInt(4, vo.getOrderno());
-			pstmt.setInt(5, vo.getDepth());
-			pstmt.setLong(6, vo.getUserno());
+			pstmt.setInt(3, vo.getHit());
+			pstmt.setInt(4, vo.getGroupno());
+			pstmt.setInt(5, vo.getOrderno());
+			pstmt.setInt(6, vo.getDepth());
+			pstmt.setLong(7, vo.getUserno());
 			
 			pstmt.executeUpdate();
 			
@@ -273,7 +276,46 @@ public class BoardDao {
 		return result;
 		
 	}
-	
+	public BoardVo hit(Long no) {
+		BoardVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = getConnection();
+			
+			String sql = "update board "
+					+ "      set hit=hit+1 "
+					+ "    where no=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = new BoardVo();
+				
+				Long no1 = rs.getLong(1);
+				
+				result.setNo(no1);
+			}
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		

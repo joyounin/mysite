@@ -27,6 +27,7 @@ public class ReplyAction implements Action {
 		
 		vo.setTitle(request.getParameter("title"));
 		vo.setContents(request.getParameter("content"));
+		vo.setHit(vo.getHit());
 		vo.setUserno(authUser.getNo());
 		vo.setOrderno(vo.getOrderno()+1);
 		vo.setDepth(vo.getDepth()+1);
