@@ -38,6 +38,7 @@
 					<c:if test="${authUser.no == vo.userno}">
 						<a href="${pageContext.request.contextPath }/board?a=modifyform&userno=${vo.userno }&no=${vo.no }">글수정</a>
 					</c:if>
+					<a href="${pageContext.request.contextPath }/board?a=replyform&no=${vo.no }">답글</a>
 				</div>
 			</div>
 		</div>

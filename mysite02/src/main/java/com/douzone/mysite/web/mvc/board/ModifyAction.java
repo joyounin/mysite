@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.douzone.mysite.dao.BoardDao;
 import com.douzone.mysite.vo.BoardVo;
+import com.douzone.mysite.vo.UserVo;
 import com.douzone.web.mvc.Action;
 import com.douzone.web.util.MvcUtil;
 
@@ -15,19 +16,21 @@ public class ModifyAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		UserVo authUser = (UserVo)request.getSession().getAttribute("authUser");
+		if(authUser == null) {
+			MvcUtil.redirect(request.getContextPath(), request, response);
+			return;
+		}
 		
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		String useno = request.getParameter("userno");
-		Long userno = Long.parseLong(useno);
 		String sno = request.getParameter("no");
 		Long no = Long.parseLong(sno);
 		
 		BoardVo vo = new BoardVo();
 		vo.setTitle(title);
 		vo.setContents(content);
-		vo.setUserno(userno);
+		vo.setUserno(authUser.getNo());
 		vo.setNo(no);
 
 		new BoardDao().modify(vo);

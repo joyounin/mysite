@@ -31,23 +31,49 @@
 					
 					<c:set var="count" value="${fn:length(list) }" />
 					<c:forEach items="${list }" var="vo" varStatus="status">
-					<tr>
+						<tr>
 						<td>[${count - status.index }]</td>
-						<td style="text-align:left; padding-left:0px" >
-							<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a>
-						</td>
-						<td>${vo.uname }</td>
-						<td>${vo.hit}</td>
-						<td>${vo.regdate }</td>
-						<c:if test="${authUser.no == vo.userno}">
-								<td><a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no }&userno=${authUser.no }" class="del">삭제</a></td>
-						</c:if>	
+						<c:if test="${vo.depth == 0}">
+							<td style="text-align:left; padding-left:0px" >
+								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a>
+							</td>
+						</c:if>
 						
-					</tr>
+						<c:if test="${vo.depth == 1}">
+							<td style="text-align:left; padding-left:15px">
+							<img src="${pageContext.request.contextPath }/assets/images/reply.png">
+								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a>
+							</td>
+						</c:if>
+						
+						<c:if test="${vo.depth == 2}">
+							<td style="text-align:left; padding-left:30px">
+							<img src="${pageContext.request.contextPath }/assets/images/reply.png">
+								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a>
+							</td>
+						</c:if>
+						<c:if test="${vo.depth == 3}">
+							<td style="text-align:left; padding-left:45px">
+							<img src="${pageContext.request.contextPath }/assets/images/reply.png">
+								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a>
+							</td>
+						</c:if>
+						<c:if test="${vo.depth > 3}">
+							<td style="text-align:left; padding-left:45px">
+							<img src="${pageContext.request.contextPath }/assets/images/reply.png">
+								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a>
+							</td>
+						</c:if>
+						
+							<td>${vo.uname }</td>
+							<td>${vo.hit}</td>
+							<td>${vo.regdate }</td>
+							<c:if test="${authUser.no == vo.userno}">
+									<td><a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no }&userno=${authUser.no }" class="del">삭제</a></td>
+							</c:if>	
+							</tr>
 					</c:forEach>
 					
-					
-
 				</table>
 				<!-- pager 추가 -->
 				<div class="pager">
@@ -62,6 +88,7 @@
 					</ul>
 				</div>					
 				<!-- pager 추가 -->
+				
 				<c:if test="${not empty authUser }">
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath }/board?a=writeform&userno=${authUser.no }" id="new-book">글쓰기</a>

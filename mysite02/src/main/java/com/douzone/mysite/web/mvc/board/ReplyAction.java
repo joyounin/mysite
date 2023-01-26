@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.douzone.mysite.dao.BoardDao;
 import com.douzone.mysite.vo.BoardVo;
@@ -13,29 +12,28 @@ import com.douzone.mysite.vo.UserVo;
 import com.douzone.web.mvc.Action;
 import com.douzone.web.util.MvcUtil;
 
-public class ModifyFormAction implements Action {
+public class ReplyAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Access Control(접근 제어)
-		HttpSession session = request.getSession();
-		if(session == null) {
-			MvcUtil.redirect(request.getContextPath(), request, response);
-			return;
-		}
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		UserVo authUser = (UserVo)request.getSession().getAttribute("authUser");
 		if(authUser == null) {
 			MvcUtil.redirect(request.getContextPath(), request, response);
 			return;
 		}
 		String sno = request.getParameter("no");
 		Long no = Long.parseLong(sno);
+		BoardVo vo = new BoardDao().findByNo(no);
 		
-		BoardVo vo = new BoardDao().findByNo(no); 
+		vo.setTitle(request.getParameter("title"));
+		vo.setContents(request.getParameter("content"));
+		vo.setUserno(authUser.getNo());
+		vo.setOrderno(vo.getOrderno()+1);
+		vo.setDepth(vo.getDepth()+1);
 		
-		request.setAttribute("vo", vo);
+		new BoardDao().replyinsert(vo);
 		
-		MvcUtil.forward("board/modify", request, response);
+		MvcUtil.redirect(request.getContextPath() + "/board?a=list",request, response);
 
 	}
 

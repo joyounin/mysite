@@ -7,36 +7,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.douzone.mysite.dao.BoardDao;
-import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.UserVo;
 import com.douzone.web.mvc.Action;
 import com.douzone.web.util.MvcUtil;
 
-public class ModifyFormAction implements Action {
+public class ReplyFormAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Access Control(접근 제어)
 		HttpSession session = request.getSession();
-		if(session == null) {
+		if (session == null) {
 			MvcUtil.redirect(request.getContextPath(), request, response);
 			return;
 		}
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {
+		UserVo authUser = (UserVo) session.getAttribute("authUser");
+		if (authUser == null) {
 			MvcUtil.redirect(request.getContextPath(), request, response);
 			return;
 		}
-		String sno = request.getParameter("no");
-		Long no = Long.parseLong(sno);
 		
-		BoardVo vo = new BoardDao().findByNo(no); 
+		request.setAttribute("no", request.getAttribute("no"));
 		
-		request.setAttribute("vo", vo);
-		
-		MvcUtil.forward("board/modify", request, response);
-
+		MvcUtil.forward("board/reply", request, response);
 	}
-
 }
