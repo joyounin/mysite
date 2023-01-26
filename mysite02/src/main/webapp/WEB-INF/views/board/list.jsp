@@ -40,7 +40,7 @@
 						<td>${vo.hit}</td>
 						<td>${vo.regdate }</td>
 						<c:if test="${authUser.no == vo.userno}">
-								<td><a href="${pageContext.request.contextPath }/board?a=delete" class="del">삭제</a></td>
+								<td><a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no }&userno=${authUser.no }" class="del">삭제</a></td>
 						</c:if>	
 						
 					</tr>

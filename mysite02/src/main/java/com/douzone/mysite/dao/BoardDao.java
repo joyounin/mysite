@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.douzone.mysite.vo.BoardVo;
-import com.douzone.mysite.vo.UserVo;
 
 public class BoardDao {
 	public List<BoardVo> findlist() {
@@ -72,11 +71,12 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 			
-			String sql = "select no, title, contents from board where no = ? ";
+			String sql = " select no, title, contents, user_no "
+					+ "      from board "
+					+ "     where no = ? ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setLong(1, no);
-			
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
@@ -85,10 +85,13 @@ public class BoardDao {
 				Long no1 = rs.getLong(1);
 				String title = rs.getString(2);
 				String contents = rs.getString(3);
+				Long userno = rs.getLong(4);
 				
 				result.setNo(no1);
 				result.setTitle(title);
 				result.setContents(contents);
+				result.setUserno(userno);
+				
 			}
 			
 		} catch (SQLException e) {
@@ -174,7 +177,56 @@ public class BoardDao {
 		}
 		
 	}
-
+	public BoardVo modify(BoardVo vo) {
+		BoardVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = getConnection();
+			
+			String sql = "update board "
+					+ "      set title = ?, contents = ?  "
+					+ "    where user_no = ? and no = ?" ;
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContents());
+			pstmt.setLong(3, vo.getUserno());
+			pstmt.setLong(4, vo.getNo());
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = new BoardVo();
+			
+				String title = rs.getString(1);
+				String content = rs.getString(2);
+				Long userno = rs.getLong(3);
+				Long no = rs.getLong(4);
+				
+				result.setTitle(title);
+				result.setContents(content);
+				result.setUserno(userno);
+				result.setNo(no);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+		
+	}
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		
@@ -188,6 +240,7 @@ public class BoardDao {
 		
 		return conn;
 	}
+
 
 
 
