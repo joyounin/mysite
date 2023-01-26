@@ -3,6 +3,7 @@ package com.douzone.mysite.web.mvc.board;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,9 +20,27 @@ public class ViewFormAction implements Action {
 		Long no = Long.parseLong(sno);
 		
 		BoardVo vo = new BoardDao().findByNo(no);
-		BoardVo vo1 = new BoardDao().hit(no);
 		request.setAttribute("vo", vo);
-		request.setAttribute("vo1", vo1);
+		
+		boolean bcookie = false;
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null && cookies.length > 0) {
+			for(Cookie cookie : cookies) {
+				System.out.println(cookie.getName());
+				if(sno.equals(cookie.getName())){
+					bcookie = true;
+				}
+			}
+		}
+		if(!bcookie) {
+			// 쿠키 쓰기
+			Cookie cookie2 = new Cookie(sno, String.valueOf(1));
+			cookie2.setPath(request.getContextPath());
+			cookie2.setMaxAge(24 * 60 * 60);  // 1day
+			response.addCookie(cookie2);
+			BoardVo vo1 = new BoardDao().hit(no);
+			request.setAttribute("vo1", vo1);
+		}
 		
 		
 		MvcUtil.forward("board/view", request, response);	
