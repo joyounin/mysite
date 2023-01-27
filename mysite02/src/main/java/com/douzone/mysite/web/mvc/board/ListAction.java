@@ -16,8 +16,22 @@ public class ListAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<BoardVo> list = new BoardDao().findlist();
+		String p = request.getParameter("page");
+		int firstnum = 1;
+		int lastnum = 5;
+		if(p != null) {
+			firstnum = Integer.parseInt(p);
+		}
+		
+		List<BoardVo> list = new BoardDao().findlist(firstnum, lastnum);
 		request.setAttribute("list", list);
+		request.setAttribute("firstnum", firstnum);
+//		System.out.println(firstnum);
+		int totalcount = new BoardDao().findcount(lastnum);
+		
+//		System.out.println(totalcount);
+		request.setAttribute("totalcount", totalcount);
+		
 		
 		MvcUtil.forward("board/list", request, response);
 

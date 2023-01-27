@@ -11,13 +11,13 @@ import java.util.List;
 import com.douzone.mysite.vo.BoardVo;
 
 public class BoardDao {
-	public List<BoardVo> findlist() {
+	public List<BoardVo> findlist(int firstnum, int lastnum) {
 		List<BoardVo> result = new ArrayList<>();
-	
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+		Integer firstnu = (firstnum-1) * lastnum;
 		try {
 			conn = getConnection();
 			
@@ -27,7 +27,8 @@ public class BoardDao {
 					+ "order by a.g_no desc, a.o_no asc limit ?, ? ";
 			pstmt = conn.prepareStatement(sql);
 			
-			
+			pstmt.setInt(1, firstnu);
+			pstmt.setInt(2, lastnum);
 			
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -67,6 +68,49 @@ public class BoardDao {
 		
 		return result;
 	}
+	
+	public int findcount(int lastnum) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = " select count(*) "
+					+ "      from board ";
+			pstmt = conn.prepareStatement(sql);
+			
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				int result1 = rs.getInt(1);
+				result = result1 % lastnum == 0 ? result1/lastnum : (result1/lastnum)+1; 
+			}
+			if(result == 0) {
+				result = 1;
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
 	public BoardVo findByNo(Long no) {
 		BoardVo result = null;
 		Connection conn = null;
