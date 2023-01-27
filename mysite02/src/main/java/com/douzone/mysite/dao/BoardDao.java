@@ -24,9 +24,11 @@ public class BoardDao {
 			String sql ="  select a.no, a.title, a.contents, b.name, a.hit, a.reg_date, a.g_no, a.o_no, depth, a.user_no "
 					+ "from board a, user b "
 					+ "where a.user_no = b.no "
-					+ "order by a.g_no desc, a.o_no asc ";
+					+ "order by a.g_no desc, a.o_no asc limit ?, ? ";
 			pstmt = conn.prepareStatement(sql);
-
+			
+			
+			
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				BoardVo vo = new BoardVo();
