@@ -29,9 +29,11 @@ public class ReplyAction implements Action {
 		vo.setContents(request.getParameter("content"));
 		vo.setHit(vo.getHit());
 		vo.setUserno(authUser.getNo());
-		vo.setOrderno(vo.getOrderno()+1);
+		vo.setOrderno(vo.getOrderno());
 		vo.setDepth(vo.getDepth()+1);
 		
+//		System.out.println(vo);
+				
 		new BoardDao().replyupdate(vo);
 		new BoardDao().replyinsert(vo);
 		

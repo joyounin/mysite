@@ -26,7 +26,6 @@ public class ViewFormAction implements Action {
 		Cookie[] cookies = request.getCookies();
 		if(cookies != null && cookies.length > 0) {
 			for(Cookie cookie : cookies) {
-				System.out.println(cookie.getName());
 				if(sno.equals(cookie.getName())){
 					bcookie = true;
 				}
