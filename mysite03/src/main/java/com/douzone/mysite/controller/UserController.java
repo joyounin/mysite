@@ -58,6 +58,7 @@ public class UserController {
 	public String update(HttpSession session, Model model) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		UserVo vo = userService.findByno(authUser.getNo());
+		// view에 vo라는 이름으로 뿌려준다.
 		model.addAttribute("vo", vo);
 		
 		return "user/update";
