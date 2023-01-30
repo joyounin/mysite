@@ -53,4 +53,20 @@ public class UserController {
 		
 		return "redirect:/";
 	}
+	// update라는 url이 들어오면 현재 로그인된 유저정보를 찾는다
+	@RequestMapping(value="/update", method=RequestMethod.GET)
+	public String update(HttpSession session, Model model) {
+		UserVo authUser = (UserVo) session.getAttribute("authUser");
+		UserVo vo = userService.findByno(authUser.getNo());
+		model.addAttribute("vo", vo);
+		
+		return "user/update";
+	}
+	
+	@RequestMapping(value="/update", method=RequestMethod.POST)
+	public String update(HttpSession session, UserVo vo) {
+		userService.update(session, vo);
+		
+		return "redirect:/";
+	}
 }

@@ -1,5 +1,7 @@
 package com.douzone.mysite.service;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +15,25 @@ public class UserService {
 
 	public void join(UserVo vo) {
 		userRepository.insert(vo);
-		
 	}
 
 	public UserVo getUser(UserVo vo) {
 		return userRepository.findByEmailandPassword(vo);
 	}
+
+	public UserVo findByno(Long no) {
+		return userRepository.findByNo(no);
+	}
+	
+	public void update(HttpSession session, UserVo vo) {
+		if(vo.getPassword().equals("")) {
+			userRepository.userUpdate(vo);
+		} else {
+			userRepository.userpUpdate(vo);
+		}
+		UserVo authUser = (UserVo) session.getAttribute("authUser");
+		authUser.setName(vo.getName());
+	}
+
 	
 }
