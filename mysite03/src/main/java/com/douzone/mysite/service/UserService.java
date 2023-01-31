@@ -21,9 +21,10 @@ public class UserService {
 		return userRepository.findByEmailandPassword(vo);
 	}
 
-	public UserVo findByno(Long no) {
-		return userRepository.findByNo(no);
-	}
+	// 2023.01.30
+//	public UserVo findByno(Long no) {
+//		return userRepository.findByNo(no);
+//	}
 	
 	public void update(HttpSession session, UserVo vo) {
 		if(vo.getPassword().equals("")) {
@@ -33,6 +34,19 @@ public class UserService {
 		}
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		authUser.setName(vo.getName());
+	}
+
+	public UserVo getUser(Long no) {
+		return userRepository.findByNo(no);
+	}
+
+	public void updateUser(UserVo vo) {
+		if(vo.getPassword().equals("")) {
+			userRepository.userUpdate(vo);
+		} else {
+			userRepository.userpUpdate(vo);
+		}
+		
 	}
 
 	

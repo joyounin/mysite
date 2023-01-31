@@ -53,21 +53,55 @@ public class UserController {
 		
 		return "redirect:/";
 	}
-	// update라는 url이 들어오면 현재 로그인된 유저정보를 찾는다
+	
+	// 2023.01.31에 짠 코드
 	@RequestMapping(value="/update", method=RequestMethod.GET)
 	public String update(HttpSession session, Model model) {
+		// Access Control authUser가 아닐경우 주소창으로 들어오는 방법을 막는다
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		UserVo vo = userService.findByno(authUser.getNo());
-		// view에 vo라는 이름으로 뿌려준다.
-		model.addAttribute("vo", vo);
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		/////////////////////////////////////////////////
+		
+		UserVo userVo = userService.getUser(authUser.getNo());
+		
+		model.addAttribute("UserVo", userVo);
+		return "user/update";
+	}
+	@RequestMapping(value="/update", method=RequestMethod.POST)
+	public String update(HttpSession session, UserVo vo) {
+		// Access Control authUser가 아닐경우 주소창으로 들어오는 방법을 막는다
+		UserVo authUser = (UserVo) session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		/////////////////////////////////////////////////
+		
+		vo.setNo(authUser.getNo());
+		userService.updateUser(vo);
+		
+		authUser.setName(vo.getName());
 		
 		return "user/update";
 	}
 	
-	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String update(HttpSession session, UserVo vo) {
-		userService.update(session, vo);
-		
-		return "redirect:/";
-	}
+	// 2023.01.30에 짠 코드
+//	 update라는 url이 들어오면 현재 로그인된 유저정보를 찾는다
+//	@RequestMapping(value="/update", method=RequestMethod.GET)
+//	public String update(HttpSession session, Model model) {
+//		UserVo authUser = (UserVo) session.getAttribute("authUser");
+//		UserVo vo = userService.findByno(authUser.getNo());
+//		// view에 vo라는 이름으로 뿌려준다.
+//		model.addAttribute("vo", vo);
+//		
+//		return "user/update";
+//	}
+//	
+//	@RequestMapping(value="/update", method=RequestMethod.POST)
+//	public String update(HttpSession session, UserVo vo) {
+//		userService.update(session, vo);
+//		
+//		return "redirect:/";
+//	}
 }
