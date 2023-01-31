@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
+import com.douzone.mysite.exception.UserRepositoryException;
 import com.douzone.mysite.vo.UserVo;
 
 @Repository
@@ -73,7 +74,7 @@ public class UserRepository {
 			}
 			
 		} catch (SQLException e) {
-			System.out.println("error:" + e);
+			throw new UserRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if(rs != null) {
@@ -139,37 +140,34 @@ public class UserRepository {
 		return result;
 	}
 	
-	public UserVo userpUpdate(UserVo vo) {
+	public UserVo userUpdate(UserVo vo) {
 		UserVo result = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			conn = getConnection();
-			
-			String sql = " update user set name = ?, password = password(?),  gender = ?"
-					+ "     where no= ?";
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getPassword());
-			pstmt.setString(3, vo.getGender());
-			pstmt.setLong(4, vo.getNo());
-			
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				result = new UserVo();
-			
-				String name = rs.getString(1);
-				String password = rs.getString(2);
-				String gender = rs.getString(3);
-				Long no = rs.getLong(4);
+			if("".equals(vo.getPassword())) {
+				String sql = " update user set name = ?, gender = ?"
+						+ "     where no= ?";
+				pstmt = conn.prepareStatement(sql);
 				
-				result.setName(name);
-				result.setPassword(password);
-				result.setGender(gender);
-				result.setNo(no);
+				pstmt.setString(1, vo.getName());
+				pstmt.setString(2, vo.getGender());
+				pstmt.setLong(3, vo.getNo());
+			} else {
+				String sql = " update user set name = ?, password = password(?),  gender = ?"
+						+ "     where no= ?";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, vo.getName());
+				pstmt.setString(2, vo.getPassword());
+				pstmt.setString(3, vo.getGender());
+				pstmt.setLong(4, vo.getNo());
 			}
+			
+			pstmt.executeUpdate();
+
 			
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
@@ -189,53 +187,6 @@ public class UserRepository {
 		return result;
 	}
 	
-	public UserVo userUpdate(UserVo vo) {
-		UserVo result = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-			
-			String sql = " update user set name = ?, gender = ?"
-					+ "     where no= ?";
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getGender());
-			pstmt.setLong(3, vo.getNo());
-			
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				result = new UserVo();
-			
-				String name = rs.getString(1);
-				String gender = rs.getString(2);
-				Long no = rs.getLong(3);
-				
-				result.setName(name);
-				result.setGender(gender);
-				result.setNo(no);
-			}
-			
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-				
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		
