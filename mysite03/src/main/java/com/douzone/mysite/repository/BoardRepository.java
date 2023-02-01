@@ -122,65 +122,11 @@ public class BoardRepository {
 	}
 	
 	public BoardVo findByNo(Long no) {
-		BoardVo result = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		try {
-			conn = getConnection();
-			
-			String sql = " select no, title, contents, user_no, g_no, o_no, depth, hit "
-					+ "      from board "
-					+ "     where no = ? ";
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setLong(1, no);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				result = new BoardVo();
-				
-				Long no1 = rs.getLong(1);
-				String title = rs.getString(2);
-				String contents = rs.getString(3);
-				Long userno = rs.getLong(4);
-				Integer groupno = rs.getInt(5);
-				Integer orderno = rs.getInt(6);
-				Integer depth = rs.getInt(7);
-				Integer hit = rs.getInt(8);
-				
-				result.setNo(no1);
-				result.setTitle(title);
-				result.setContents(contents);
-				result.setUserno(userno);
-				result.setGroupno(groupno);
-				result.setOrderno(orderno);
-				result.setDepth(depth);
-				result.setHit(hit);
-				
-			}
-			
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-				
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
+		return sqlSession.selectOne("board.findByNo", no);
 	}
 	
 			
-	public void insert(BoardVo vo) {
+	public void write(BoardVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
@@ -426,7 +372,7 @@ public class BoardRepository {
 		map.put("size", size);
 		map.put("keyword", "%"+keyword+"%");
 		
-		return sqlSession.selectList("board.finAllByPageAndKeyWord", map);
+		return sqlSession.selectList("board.findAllByPageAndKeyWord", map);
 	}
 
 	public int getTotalCount(String keyword) {

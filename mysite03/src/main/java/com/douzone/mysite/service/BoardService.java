@@ -24,7 +24,7 @@ public class BoardService {
 	
 	// view에서 요청하는 서비스
 	public BoardVo getContents(Long no) {
-		return null;
+		return boardRepository.findByNo(no);
 	}
 	
 	// 게시글 수정할때 폼
@@ -45,12 +45,10 @@ public class BoardService {
 	// 페이지 검색 기능
 	public Map<String, Object> getContentsList(int page, String keyword) {
 		int toTalCount = boardRepository.getTotalCount(keyword);
+
 		
 		// 1. view에서 게시판 리스트를 렌더링 하기 위한 데이터 값 계산
-		int beginPage = 0;
-		int prePage = 0;
-		int nextPage = 0;
-		int endPage = 0;
+		int endPage = toTalCount % LIST_SIZE == 0 ? toTalCount/LIST_SIZE : (toTalCount/LIST_SIZE)+1;
 		
 		// 2. 리스트 가져오기
 		List<BoardVo> list = boardRepository.findAllByPageAndKeyWord(page, keyword, LIST_SIZE);
@@ -58,15 +56,11 @@ public class BoardService {
 		// 3. 리스트 정보를 맵에 저장
 		Map<String, Object> map = new HashMap<>();
 		map.put("list", list);
-		map.put("beginPage", beginPage);
-		map.put("prePage", prePage);
-		// ...
-		// ...
-		
-		
+		map.put("endPage", endPage);
 		
 		return map;
 	}
+
 	
 	
 }
