@@ -29,7 +29,7 @@ public class UserService {
 	}
 
 	public void updateUser(UserVo vo) {
-		userRepository.userUpdate(vo);
+		userRepository.update(vo);
 		
 	}
 }

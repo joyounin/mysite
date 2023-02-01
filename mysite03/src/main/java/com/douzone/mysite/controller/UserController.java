@@ -83,7 +83,7 @@ public class UserController {
 		
 		authUser.setName(vo.getName());
 		
-		return "redirect:/user/update";
+		return "redirect:/";
 	}
 	
 	// 2023.01.30에 짠 코드
