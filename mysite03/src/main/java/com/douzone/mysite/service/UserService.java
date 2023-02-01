@@ -16,7 +16,7 @@ public class UserService {
 	}
 
 	public UserVo getUser(UserVo vo) {
-		return userRepository.findByEmailandPassword(vo);
+		return userRepository.findByEmailAndPassword(vo.getEmail(), vo.getPassword());
 	}
 
 	// 2023.01.30

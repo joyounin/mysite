@@ -7,66 +7,86 @@
 	</parent>
 	<artifactId>mysite03</artifactId>
 	<packaging>war</packaging>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<org.springframewok-version>5.3.25</org.springframewok-version>
+		<org.springframework-version>5.3.25</org.springframework-version>
 	</properties>
+
 	<dependencies>
-		<!-- spring context -->
+		<!-- Spring MVC -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-webmvc</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- Spring JDBC -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${org.springframewok-version}</version>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework-version}</version>
 		</dependency>
-		<!-- spring web -->
+
+		<!-- JSTL -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${org.springframewok-version}</version>
+		    <groupId>jstl</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
 		</dependency>
-		<!-- spring mvc -->
+		
+		<!-- MyBatis -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframewok-version}</version>
-		</dependency>
-		<!-- jstl -->
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.5.9</version>
 		</dependency>
 		<dependency>
-			<!-- MariaDB JDBC Driver -->
-			<groupId>org.mariadb.jdbc</groupId>
-			<artifactId>mariadb-java-client</artifactId>
-			<version>3.0.8</version>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>2.0.7</version>
 		</dependency>
-		<!-- servlet -->
+		
+		<!-- Common DBCP -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
-			<scope>provided</scope>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		<!-- MariaDB JDBC Driver -->
+		<dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+		    <version>3.0.8</version>
+		</dependency>
+				
+		<!-- Servlet -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>4.0.1</version>
+		    <scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.2</version>
-			<scope>provided</scope>
-		</dependency>
+		    <groupId>javax.servlet.jsp</groupId>
+		    <artifactId>jsp-api</artifactId>
+		    <version>2.2</version>
+		    <scope>provided</scope>
+		</dependency>	
 	</dependencies>
+	
 	<build>
 		<finalName>mysite03</finalName>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.3.2</version>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-war-plugin</artifactId>
+			    <version>3.3.2</version>
 			</plugin>
 		</plugins>
-	</build>
+	</build>	
 </project>
