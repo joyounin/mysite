@@ -54,7 +54,7 @@
 	
 	<select id="findByNoAndUserNo" resultType="boardvo" parameterType="map">
 		<![CDATA[
-			 select no, title, contents, user_no, g_no, o_no, depth, hit 
+			 select no, title, contents, user_no as userno, g_no, o_no, depth, hit 
 			  from board 
 		 	 where no = #{no }
 		 	   and user_no = #{userno }
