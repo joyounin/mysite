@@ -48,6 +48,9 @@ public class BoardService {
 
 		
 		// 1. view에서 게시판 리스트를 렌더링 하기 위한 데이터 값 계산
+		int beginPage = 1;
+		int prevPage = 0;
+		int nextPage = 0;
 		int endPage = toTalCount % LIST_SIZE == 0 ? toTalCount/LIST_SIZE : (toTalCount/LIST_SIZE)+1;
 		
 		// 2. 리스트 가져오기
@@ -56,6 +59,7 @@ public class BoardService {
 		// 3. 리스트 정보를 맵에 저장
 		Map<String, Object> map = new HashMap<>();
 		map.put("list", list);
+		map.put("beginPage", beginPage);
 		map.put("endPage", endPage);
 		
 		return map;

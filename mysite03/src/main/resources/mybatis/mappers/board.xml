@@ -4,8 +4,8 @@
 	<select id="findAllByPageAndKeyWord" resultType="string" parameterType="map">
 		<!-- 동적 쿼리 사용 keyword가 있을경우, 없을경우 -->
 		<choose>
-			<when test='keyword == ""'>
-			   select a.no, a.title, a.contents, b.name, a.hit, a.reg_date, a.g_no, a.o_no, depth, a.user_no "
+			<when test='keyword == "" or keyword == null'>
+			   select a.no, a.title, a.contents, b.name, a.hit, a.reg_date, a.g_no, a.o_no, depth, a.user_no
 				 from board a, user b
 			    where a.user_no = b.no
 			 order by a.g_no desc, a.o_no asc 
@@ -13,9 +13,10 @@
 			</when>
 			<otherwise>
 				<![CDATA[
-				select *
-				  from board
-				 where title like '%${keyword }%'
+				select a.no, a.title, a.contents, b.name, a.hit, a.reg_date, a.g_no, a.o_no, depth, a.user_no
+				  from board a, user b
+				 where a.user_no = b.no
+				   and title like '%${keyword }%'
 				    or contents like '%${keyword }%'
 				 limit #{startOffset }, #{size }
 				]]>
