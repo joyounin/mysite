@@ -120,44 +120,8 @@ public class BoardRepository {
 		}
 		return result;
 	}
+
 	
-	public BoardVo findByNo(Long no) {
-		return sqlSession.selectOne("board.findByNo", no);
-	}
-	
-			
-	public void write(BoardVo vo) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		try {
-			conn = getConnection();
-			
-			String sql = "insert into board values(null, ?, ?, 0, now(), (select ifnull(max(g_no)+1, 1) from board b), 1, 0, ? )";
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, vo.getTitle());
-			pstmt.setString(2, vo.getContents());
-			pstmt.setLong(3, vo.getUserno());
-			
-			pstmt.executeUpdate();
-			
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 	public void replyupdate(BoardVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -370,12 +334,27 @@ public class BoardRepository {
 		Map<String, Object> map = new HashMap<>();
 		map.put("startOffset", (page-1) * size);
 		map.put("size", size);
-		map.put("keyword", "%"+keyword+"%");
+		map.put("keyword", keyword);
 		
 		return sqlSession.selectList("board.findAllByPageAndKeyWord", map);
 	}
 
 	public int getTotalCount(String keyword) {
 		return sqlSession.selectOne("board.getTotalCount", keyword);
+	}
+
+	public BoardVo findByNoAndUserNo(Long no, Long userno) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("userno", userno);
+		map.put("no", no);
+		return sqlSession.selectOne("board.findByNoAndUserNo", map);
+	}
+	public BoardVo findByNo(Long no) {
+		return sqlSession.selectOne("board.findByNo", no);
+	}
+	
+			
+	public void write(BoardVo vo) {
+		sqlSession.insert("board.write", vo);
 	}
 }

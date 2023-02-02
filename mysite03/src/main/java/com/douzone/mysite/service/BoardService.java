@@ -12,7 +12,7 @@ import com.douzone.mysite.vo.BoardVo;
 
 @Service
 public class BoardService {
-	private static final int LIST_SIZE = 3; // 리스팅되는 게시물의 수
+	private static final int LIST_SIZE = 2; // 리스팅되는 게시물의 수
 	private static final int PAGE_SIZE = 5; // 페이지 리스트의 수
 	
 	@Autowired
@@ -28,8 +28,8 @@ public class BoardService {
 	}
 	
 	// 게시글 수정할때 폼
-	public BoardVo getContents(Long no, Long UserNo) {
-		return null;
+	public BoardVo getContents(Long no, Long userno) {
+		return boardRepository.findByNoAndUserNo(no, userno);
 	}
 	
 	// 업데이트
@@ -48,10 +48,15 @@ public class BoardService {
 
 		
 		// 1. view에서 게시판 리스트를 렌더링 하기 위한 데이터 값 계산
-		int beginPage = 1;
-		int prevPage = 0;
-		int nextPage = 0;
-		int endPage = toTalCount % LIST_SIZE == 0 ? toTalCount/LIST_SIZE : (toTalCount/LIST_SIZE)+1;
+		// 시작 페이지
+		int startPage = page;
+		// 처음 리스트 페이지 1~5 6~10
+		int endPage = (int)Math.ceil(page/(double)PAGE_SIZE) * PAGE_SIZE;
+		
+		int beginPage = endPage - (PAGE_SIZE - 1);
+		// 끝페이지
+		int totalPage = (int)Math.ceil(toTalCount/(double)LIST_SIZE);
+		
 		
 		// 2. 리스트 가져오기
 		List<BoardVo> list = boardRepository.findAllByPageAndKeyWord(page, keyword, LIST_SIZE);
@@ -59,10 +64,18 @@ public class BoardService {
 		// 3. 리스트 정보를 맵에 저장
 		Map<String, Object> map = new HashMap<>();
 		map.put("list", list);
+		map.put("startPage", startPage);
 		map.put("beginPage", beginPage);
 		map.put("endPage", endPage);
+		map.put("totalPage", totalPage);
+		map.put("keyword", keyword);
 		
 		return map;
+	}
+
+	public void write(BoardVo vo) {
+		boardRepository.write(vo);
+		
 	}
 
 	
