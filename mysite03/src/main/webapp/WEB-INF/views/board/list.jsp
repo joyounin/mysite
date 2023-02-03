@@ -15,7 +15,7 @@
 			<c:import url="/WEB-INF/views/includes/header.jsp"></c:import>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath }/guestbook?page=1&keyword=${keyword } " method="post">
+				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
 					<input type="text" id="keyword" name="keyword" value="${keyword }">
 					<input type="submit" value="찾기">
 				</form>
@@ -68,8 +68,8 @@
 							<td>${vo.hit }</td>
 							<td>${vo.reg_date }</td>
 							<c:if test="${authUser.no == vo.userno}">
-									<td><a href="${pageContext.request.contextPath }/board/delete?no=${vo.no }&userno=${authUser.no }" class="del">삭제</a></td>
-							</c:if>	
+								<td><a href="${pageContext.request.contextPath }/board/delete?userno=${vo.userno }&no=${vo.no }" class="del">삭제</a></td>
+							</c:if>
 							</tr>
 					</c:forEach>
 					
@@ -78,22 +78,30 @@
 				<div class="pager">
 					<ul>
 					<c:choose>
-						<c:when test="${startPage == 1 }">
+						<c:when test="${page == 1 }">
 							<li class="disabled">◀</li>
 						</c:when>
 						<c:otherwise>
-							<li><a href="${pageContext.request.contextPath }/board?page=${startPage - 1 }&keyword=${keyword }">◀</a></li>
+							<li><a href="${pageContext.request.contextPath }/board?page=${page-1 }&keyword=${keyword }">◀</a></li>
 						</c:otherwise>
 					</c:choose>
-					<c:forEach var="startPage" begin="1" end="${endPage }" step="1">
-						<li><a href="${pageContext.request.contextPath }/board?page=${startPage }&keyword=${keyword }">${startPage }</a></li>
+					<c:forEach var="i" begin="${beginPage }" end="${endPage }" step="1">
+						<c:choose>
+							<c:when test="${page eq i }">
+								<li class=selected>${i }</li>
+							</c:when>
+							<c:otherwise>
+								<li><a href="${pageContext.request.contextPath }/board?page=${i }&keyword=${keyword }">${i }</a></li>
+							</c:otherwise>
+						</c:choose>
+						
 					</c:forEach>
 					<c:choose>
-						<c:when test="${startPage == totalPage }">
+						<c:when test="${page == totalPage }">
 							<li class="disabled">▶</li>
 						</c:when>
 						<c:otherwise>
-							<li><a href="${pageContext.request.contextPath }/board?page=${startPage + 1 }">▶</a></li>
+							<li><a href="${pageContext.request.contextPath }/board?page=${page+1 }&keyword=${keyword }">▶</a></li>
 						</c:otherwise>
 					</c:choose>
 					</ul>
@@ -102,7 +110,7 @@
 				
 				<c:if test="${not empty authUser }">
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath }/board/write&userno=${authUser.no }" id="new-book">글쓰기</a>
+					<a href="${pageContext.request.contextPath }/board/write?userno=${authUser.no }" id="new-book">글쓰기</a>
 				</div>
 				</c:if>				
 			</div>

@@ -18,7 +18,6 @@
 			<div id="board">
 				<form class="board-form" method="post" action="${pageContext.request.contextPath }/board/modify">
 					<input type = "hidden" name = "no" value="${boardvo.no }">
-					<input type = "hidden" name = "userno" value="${boardvo.userno }">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글수정</th>
@@ -30,7 +29,7 @@
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content">
+								<textarea id="content" name="contents">
 								${fn:replace(boardvo.contents, newline, "") }
 								</textarea>
 							</td>
