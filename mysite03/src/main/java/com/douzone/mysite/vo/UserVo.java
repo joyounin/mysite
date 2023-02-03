@@ -1,8 +1,10 @@
 package com.douzone.mysite.vo;
 
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
 public class UserVo {
 	
@@ -15,8 +17,9 @@ public class UserVo {
 	@NotEmpty
 	@Email
 	private String email;
+	
 	@NotEmpty
-	@Length(min=2, max=8)
+	@Length(min=4, max=16)
 	private String password;
 	private String gender;
 	
