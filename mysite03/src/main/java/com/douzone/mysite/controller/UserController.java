@@ -1,6 +1,5 @@
 package com.douzone.mysite.controller;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.douzone.mysite.security.Auth;
+import com.douzone.mysite.security.AuthUser;
 import com.douzone.mysite.service.UserService;
 import com.douzone.mysite.vo.UserVo;
 
@@ -44,54 +45,30 @@ public class UserController {
 	public String joinSuccess() {
 		return "user/joinsuccess";
 	}
-	@RequestMapping(value="/login", method=RequestMethod.GET)
+	@RequestMapping(value="/login")
 	public String login() {
 		return "user/login";
 	}
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(HttpSession session, UserVo vo, Model model) {
-		UserVo authUser = userService.getUser(vo);
-		
-		if(authUser == null) {
-			model.addAttribute("email", vo.getEmail());
-			return "user/login";
-		}
-		
-		session.setAttribute("authUser", authUser);
-		return "redirect:/";
-	}
+	
 	@RequestMapping(value="/logout")
-	public String logout(HttpSession session) {
-		session.removeAttribute("authUser");
-		session.invalidate();
-		
+	public String logout() {
 		return "redirect:/";
 	}
 	
 	// 2023.01.31에 짠 코드
+	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.GET)
-	public String update(HttpSession session, Model model) {
-		// Access Control authUser가 아닐경우 주소창으로 들어오는 방법을 막는다
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		/////////////////////////////////////////////////
-		
+	public String update(@AuthUser UserVo authUser, Model model) {
+	
 		UserVo userVo = userService.getUser(authUser.getNo());
 		
 		model.addAttribute("UserVo", userVo);
 		return "user/update";
 	}
+	
+	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String update(HttpSession session, UserVo vo) {
-		// Access Control authUser가 아닐경우 주소창으로 들어오는 방법을 막는다
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		/////////////////////////////////////////////////
-		
+	public String update(@AuthUser UserVo authUser, UserVo vo) {
 		vo.setNo(authUser.getNo());
 		userService.updateUser(vo);
 		

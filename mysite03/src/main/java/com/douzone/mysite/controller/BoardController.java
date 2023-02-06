@@ -25,7 +25,6 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
-	
 
 	@RequestMapping("")
 	public String index(@RequestParam(value = "page", defaultValue = "1", required = true) int page,
@@ -69,9 +68,8 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
-	public String modify(@AuthUser UserVo authUser, @RequestParam("no") Long no, Model model) {
-		
-		BoardVo vo = boardService.getContents(no, authUser.getNo());
+	public String modify(@RequestParam("userno") Long userno, @RequestParam("no") Long no, Model model) {
+		BoardVo vo = boardService.getContents(no, userno);
 		model.addAttribute("boardvo", vo);
 
 		return "board/modify";
