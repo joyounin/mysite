@@ -49,6 +49,9 @@ public class BoardService {
 		if(endPage > totalPage) {
 			endPage = totalPage;
 		}
+		if(page < 1) {
+			page = 1;
+		}
 		
 		// 2. 리스트 가져오기
 		List<BoardVo> list = boardRepository.findAllByPageAndKeyWord(page, keyword, LIST_SIZE);

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.douzone.mysite.security.Auth;
 import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.UserVo;
@@ -24,10 +25,11 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
+	
 
 	@RequestMapping("")
-	public String index(@RequestParam(value = "page", defaultValue = "1", required = false) int page,
-		@RequestParam(value="keyword", defaultValue = "", required = false) String keyword, Model model) {
+	public String index(@RequestParam(value = "page", defaultValue = "1", required = true) int page,
+		@RequestParam(value="keyword", defaultValue = "", required = true) String keyword, Model model) {
 		System.out.println(keyword);
 		Map<String, Object> map = boardService.getContentsList(page, keyword);
 
@@ -67,8 +69,9 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
-	public String modify(@RequestParam("userno") Long userno, @RequestParam("no") Long no, Model model) {
-		BoardVo vo = boardService.getContents(no, userno);
+	public String modify(@AuthUser UserVo authUser, @RequestParam("no") Long no, Model model) {
+		
+		BoardVo vo = boardService.getContents(no, authUser.getNo());
 		model.addAttribute("boardvo", vo);
 
 		return "board/modify";
@@ -83,14 +86,10 @@ public class BoardController {
 		model.addAttribute("boardvo", boardvo);
 		return "redirect:/board";
 	}
-
+	
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public String write(HttpSession session, BoardVo boardvo) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		
-		if(authUser == null) {
-			return "redirect:/board";
-		}
+	public String write() {
 		return "board/write";
 	}
 
