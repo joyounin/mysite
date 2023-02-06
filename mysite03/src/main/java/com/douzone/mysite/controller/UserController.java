@@ -25,47 +25,44 @@ public class UserController {
 	public String join(@ModelAttribute UserVo vo) {
 		return "user/join";
 	}
+
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String join(@ModelAttribute @Valid UserVo vo, BindingResult result,Model model) {
+	public String join(@ModelAttribute @Valid UserVo vo, BindingResult result, Model model) {
 		if(result.hasErrors()) {
-//			List<ObjectError> list = result.getAllErrors();
-//			for(ObjectError error : list) {
-//				System.out.println(error);
-//			}
-//			model.addAttribute("userVo", vo);
+			// List<ObjectError> list = result.getAllErrors();
+			// for(ObjectError error : list) {
+			//	System.out.println(error);
+			//}
+			
+			// model.addAttribute("userVo", vo);
 			
 			model.addAllAttributes(result.getModel());
 			return "user/join";
 		}
-		
-		//userService.join(vo);
+
+		userService.join(vo);
 		return "redirect:/user/joinsuccess";
 	}
+	
 	@RequestMapping("/joinsuccess")
 	public String joinSuccess() {
 		return "user/joinsuccess";
 	}
-	@RequestMapping(value="/login")
+
+	@RequestMapping("/login")
 	public String login() {
 		return "user/login";
 	}
 	
-	@RequestMapping(value="/logout")
-	public String logout() {
-		return "redirect:/";
-	}
-	
-	// 2023.01.31에 짠 코드
 	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.GET)
 	public String update(@AuthUser UserVo authUser, Model model) {
-	
 		UserVo userVo = userService.getUser(authUser.getNo());
 		
-		model.addAttribute("UserVo", userVo);
+		model.addAttribute("userVo", userVo);
 		return "user/update";
 	}
-	
+
 	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public String update(@AuthUser UserVo authUser, UserVo vo) {
@@ -74,25 +71,7 @@ public class UserController {
 		
 		authUser.setName(vo.getName());
 		
-		return "redirect:/";
+		return "redirect:/user/update";
 	}
 	
-	// 2023.01.30에 짠 코드
-//	 update라는 url이 들어오면 현재 로그인된 유저정보를 찾는다
-//	@RequestMapping(value="/update", method=RequestMethod.GET)
-//	public String update(HttpSession session, Model model) {
-//		UserVo authUser = (UserVo) session.getAttribute("authUser");
-//		UserVo vo = userService.findByno(authUser.getNo());
-//		// view에 vo라는 이름으로 뿌려준다.
-//		model.addAttribute("vo", vo);
-//		
-//		return "user/update";
-//	}
-//	
-//	@RequestMapping(value="/update", method=RequestMethod.POST)
-//	public String update(HttpSession session, UserVo vo) {
-//		userService.update(session, vo);
-//		
-//		return "redirect:/";
-//	}
 }

@@ -68,7 +68,7 @@
 							<td>${vo.hit }</td>
 							<td>${vo.reg_date }</td>
 							<c:if test="${authUser.no == vo.userno}">
-								<td><a href="${pageContext.request.contextPath }/board/delete?userno=${vo.userno }&no=${vo.no }" class="del">삭제</a></td>
+								<td><a href="${pageContext.request.contextPath }/board/delete?&no=${vo.no }" class="del">삭제</a></td>
 							</c:if>
 							</tr>
 					</c:forEach>
@@ -110,7 +110,7 @@
 				
 				<c:if test="${not empty authUser }">
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath }/board/write?userno=${authUser.no }" id="new-book">글쓰기</a>
+					<a href="${pageContext.request.contextPath }/board/write" id="new-book">글쓰기</a>
 				</div>
 				</c:if>				
 			</div>

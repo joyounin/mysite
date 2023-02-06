@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.douzone.mysite.security.Auth;
+import com.douzone.mysite.security.AuthUser;
 import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.UserVo;
@@ -66,18 +66,19 @@ public class BoardController {
 		}
 		return "board/view";
 	}
-
+	
+	@Auth
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
-	public String modify(@RequestParam("userno") Long userno, @RequestParam("no") Long no, Model model) {
-		BoardVo vo = boardService.getContents(no, userno);
+	public String modify(@AuthUser UserVo authUser, @RequestParam("no") Long no, Model model) {
+		BoardVo vo = boardService.getContents(no, authUser.getNo());
 		model.addAttribute("boardvo", vo);
 
 		return "board/modify";
 	}
-
+	
+	@Auth
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(HttpSession session, Model model, BoardVo boardvo) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
+	public String modify(@AuthUser UserVo authUser, Model model, BoardVo boardvo) {
 		boardvo.setUserno(authUser.getNo());
 
 		boardService.modify(boardvo);
@@ -90,35 +91,28 @@ public class BoardController {
 	public String write() {
 		return "board/write";
 	}
-
+	
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(HttpSession session, Model model, BoardVo boardvo) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
+	public String write(@AuthUser UserVo authUser, Model model, BoardVo boardvo) {
 		boardvo.setUserno(authUser.getNo());
 		
 		boardService.write(boardvo);
 		model.addAttribute("boardvo", boardvo);
 		return "redirect:/board";
 	}
-
+	
+	@Auth
 	@RequestMapping("/delete")
-	public String delete(@RequestParam("userno") Long userno, @RequestParam("no") Long no, Model model, HttpSession session, BoardVo boardvo) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if(authUser == null || authUser.getNo() != userno) {
-			return "redirect:/board";
-		}
+	public String delete(@AuthUser UserVo authUser, @RequestParam("no") Long no, Model model, BoardVo boardvo) {
 		boardvo.setUserno(authUser.getNo());
-		boardService.deleteContents(no, userno);
+		boardService.deleteContents(no, authUser.getNo());
 		return "redirect:/board";
 	}
-
+	
+	@Auth
 	@RequestMapping(value = "/reply", method = RequestMethod.GET)
-	public String reply(@RequestParam("no") Long no,@RequestParam("userno") Long userno, Model model, HttpSession session,BoardVo boardvo) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		
-		if(authUser == null || authUser.getNo() != userno) {
-			return "redirect:/board";
-		}
+	public String reply(@AuthUser UserVo authUser, @RequestParam("no") Long no, Model model,BoardVo boardvo) {
 		boardvo.setUserno(authUser.getNo());
 		
 		boardvo = boardService.getContents(no);
