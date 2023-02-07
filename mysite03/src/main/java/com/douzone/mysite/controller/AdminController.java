@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.douzone.mysite.security.Auth;
 import com.douzone.mysite.service.FileUploadService;
@@ -33,10 +35,13 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/main/update")
-	public String update(SiteVo vo) {
-		// siteService.updateSite(vo);
+	public String update(SiteVo vo, @RequestParam("file") MultipartFile file, Model model) {
+		String url = fileuploadService.restore(file);
+		vo.setProfile(url);
+		model.addAttribute("url", url);
+		siteService.updateSite(vo);
 		
-		return "reditrect:/admin";
+		return "redirect:/admin";
 	}
 	
 	@RequestMapping("/guestbook")
