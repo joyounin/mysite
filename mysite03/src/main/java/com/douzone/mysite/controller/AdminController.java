@@ -18,10 +18,6 @@ import com.douzone.mysite.vo.SiteVo;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
-	@Autowired
-	private ServletContext servletContext;
-
 	@Autowired
 	private SiteService siteService;
 	@Autowired
