@@ -29,7 +29,7 @@
 						<th>&nbsp;</th>
 					</tr>
 					
-					<c:forEach items="${list }" var="vo" varStatus="status">
+					<c:forEach items="${list }" var="vo" varStatus="status" >
 						<tr>
 						<td>[${vo.no }]</td>
 						<c:if test="${vo.depth == 0}">

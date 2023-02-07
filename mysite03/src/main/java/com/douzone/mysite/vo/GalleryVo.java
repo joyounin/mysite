@@ -3,7 +3,7 @@ package com.douzone.mysite.vo;
 public class GalleryVo {
 	private Long no;
 	private String url;
-	private String commnets;
+	private String comments;
 	public Long getNo() {
 		return no;
 	}
@@ -16,15 +16,16 @@ public class GalleryVo {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public String getCommnets() {
-		return commnets;
+	public String getComments() {
+		return comments;
 	}
-	public void setCommnets(String commnets) {
-		this.commnets = commnets;
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 	@Override
 	public String toString() {
-		return "GalleryVo [no=" + no + ", url=" + url + ", commnets=" + commnets + "]";
+		return "GalleryVo [no=" + no + ", url=" + url + ", comments=" + comments + "]";
 	}
+	
 	
 }
