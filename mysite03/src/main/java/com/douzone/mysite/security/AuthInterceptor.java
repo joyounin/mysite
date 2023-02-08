@@ -1,19 +1,15 @@
 package com.douzone.mysite.security;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.douzone.mysite.vo.UserVo;
 
 public class AuthInterceptor implements HandlerInterceptor {
-	@Autowired
-	private ServletContext servletContext;
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
