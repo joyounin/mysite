@@ -18,6 +18,7 @@ import com.douzone.mysite.vo.SiteVo;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+	
 	@Autowired
 	private SiteService siteService;
 	@Autowired
@@ -33,7 +34,9 @@ public class AdminController {
 	@RequestMapping("/main/update")
 	public String update(SiteVo vo, @RequestParam("file") MultipartFile file, Model model) {
 		String url = fileuploadService.restore(file);
-		vo.setProfile(url);
+		if(url != null) {
+			vo.setProfile(url);
+		}
 		siteService.updateSite(vo);
 		
 		model.addAttribute("url", url);
