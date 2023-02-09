@@ -22,15 +22,15 @@ public class SiteInterceptor implements HandlerInterceptor {
 			throws Exception {
 		
 		//2023.02.08 강사님 코드
-//		SiteVo site = (SiteVo)request.getServletContext().getAttribute("siteVo");
-//		if(site == null) {
-//			siteService.getSite();
-//			request.getServletContext().setAttribute("site", site);
-//		}
+		SiteVo sitevo = (SiteVo)request.getServletContext().getAttribute("siteVo");
+		if(sitevo == null) {
+			siteService.getSite();
+			request.getServletContext().setAttribute("sitevo", sitevo);
+		}
 //		2023.02.07 내가 짠 코드
-		SiteVo site = siteService.getSite();
-		servletContext.setAttribute("site", site);
-		
+//		SiteVo site = siteService.getSite();
+//		servletContext.setAttribute("site", site);
+//		
 		return true;
 	}
 	
