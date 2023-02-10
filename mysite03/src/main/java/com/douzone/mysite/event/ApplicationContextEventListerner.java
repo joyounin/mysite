@@ -19,27 +19,24 @@ public class ApplicationContextEventListerner {
 	private ApplicationContext applicationContext;
 	
 	@EventListener({ContextRefreshedEvent.class})
-	public void handleApplicationContextRefreshedEvent() {
-		System.out.println((Object)applicationContext.getClass());
-		System.out.println(System.identityHashCode(applicationContext));
+	public void handleContextRefreshedEvent() {
 		System.out.println("--- Context Refresh Event Received --- : " + applicationContext);
 	
 		SiteService service = applicationContext.getBean(SiteService.class);
 		SiteVo site = service.getSite();
 		
-		AutowireCapableBeanFactory factory = applicationContext.getAutowireCapableBeanFactory();
-		BeanDefinitionRegistry registry = (BeanDefinitionRegistry)factory;
-		
-		MutablePropertyValues PropertValues = new MutablePropertyValues();
-		PropertValues.add("title", site.getTitle());
-		PropertValues.add("profile", site.getProfile());
-		PropertValues.add("welcome", site.getWelcome());
-		PropertValues.add("description", site.getDescription());
+		MutablePropertyValues propertyValues = new MutablePropertyValues();
+		propertyValues.add("title", site.getTitle());
+		propertyValues.add("profile", site.getProfile());
+		propertyValues.add("welcome", site.getWelcome());
+		propertyValues.add("description", site.getDescription());
 		
 		GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
 		beanDefinition.setBeanClass(SiteVo.class);
-		beanDefinition.setPropertyValues(PropertValues);
+		beanDefinition.setPropertyValues(propertyValues);
 		
+		AutowireCapableBeanFactory factory = applicationContext.getAutowireCapableBeanFactory();
+		BeanDefinitionRegistry registry = (BeanDefinitionRegistry)factory;
 		registry.registerBeanDefinition("site", beanDefinition);
 		
 	}
