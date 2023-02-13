@@ -11,17 +11,6 @@
 	</select>
 	
 	<update id="update" parameterType="sitevo">
-		<choose>
-         <when test='profile == null or profile == ""'>
-            <![CDATA[
-             update site set 
-             title=#{title }, 
-             welcome=#{welcome }, 
-             description=#{description }
-             where no = 2 
-            ]]>
-         </when>
-         <otherwise>
             <![CDATA[
             update site set 
              title=#{title }, 
@@ -30,7 +19,5 @@
              description=#{description } 
              where no = 2
             ]]>
-         </otherwise>
-      </choose>
 	</update>
 </mapper>

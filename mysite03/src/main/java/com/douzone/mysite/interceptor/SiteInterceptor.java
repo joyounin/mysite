@@ -1,6 +1,5 @@
 package com.douzone.mysite.interceptor;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
