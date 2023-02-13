@@ -12,23 +12,23 @@
 	
 	<update id="update" parameterType="sitevo">
 		<choose>
-         <when test="profile != null">
-            <![CDATA[
-             update site set 
-             title=#{title }, 
-             welcome=#{welcome }, 
-             profile=#{profile }, 
-             description=#{description } 
-             where no = 2
-            ]]>
-         </when>
-         <otherwise>
+         <when test='profile == null or profile == ""'>
             <![CDATA[
              update site set 
              title=#{title }, 
              welcome=#{welcome }, 
              description=#{description }
              where no = 2 
+            ]]>
+         </when>
+         <otherwise>
+            <![CDATA[
+            update site set 
+             title=#{title }, 
+             welcome=#{welcome }, 
+             profile=#{profile }, 
+             description=#{description } 
+             where no = 2
             ]]>
          </otherwise>
       </choose>

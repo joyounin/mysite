@@ -108,7 +108,7 @@
 		location="file:/mysite-uploads/" />
 	
 	<!-- ApplicationContextEventListerner -->
-	<bean class="com.douzone.mysite.event.ApplicationContextEventListerner" />
+	<bean class="com.douzone.mysite.event.ApplicationContextEventListener" />
 	
 	<context:annotation-config />
 	<context:component-scan

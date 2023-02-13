@@ -47,7 +47,6 @@ public class AdminController {
 		
 		siteService.updateSite(vo);
 		servletContext.setAttribute("sitevo", vo);
-		model.addAttribute("url", url);
 //		site.setTitle(vo.getTitle());
 //		site.setWelcome(vo.getWelcome());
 //		site.setProfile(vo.getProfile());

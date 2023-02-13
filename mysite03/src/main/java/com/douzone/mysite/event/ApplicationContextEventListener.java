@@ -13,7 +13,7 @@ import com.douzone.mysite.service.SiteService;
 import com.douzone.mysite.vo.SiteVo;
 
 
-public class ApplicationContextEventListerner {
+public class ApplicationContextEventListener {
 	
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -38,6 +38,5 @@ public class ApplicationContextEventListerner {
 		AutowireCapableBeanFactory factory = applicationContext.getAutowireCapableBeanFactory();
 		BeanDefinitionRegistry registry = (BeanDefinitionRegistry)factory;
 		registry.registerBeanDefinition("site", beanDefinition);
-		
 	}
 }

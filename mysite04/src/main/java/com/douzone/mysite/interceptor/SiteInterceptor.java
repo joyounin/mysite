@@ -11,8 +11,6 @@ import com.douzone.mysite.service.SiteService;
 import com.douzone.mysite.vo.SiteVo;
 
 public class SiteInterceptor implements HandlerInterceptor {
-	@Autowired
-	private ServletContext servletContext;
 	
 	@Autowired
 	private SiteService siteService;

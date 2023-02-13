@@ -12,9 +12,6 @@ import com.douzone.mysite.vo.SiteVo;
 
 public class SiteInterceptor implements HandlerInterceptor {
 	@Autowired
-	private ServletContext servletContext;
-	
-	@Autowired
 	private SiteService siteService;
 	
 	@Override
@@ -22,10 +19,10 @@ public class SiteInterceptor implements HandlerInterceptor {
 			throws Exception {
 		
 		//2023.02.08 강사님 코드
-		SiteVo sitevo = (SiteVo)request.getServletContext().getAttribute("siteVo");
-		if(sitevo == null) {
-			siteService.getSite();
-			request.getServletContext().setAttribute("sitevo", sitevo);
+		SiteVo siteVo = (SiteVo)request.getServletContext().getAttribute("sitevo");
+		if(siteVo == null) {
+			siteVo = siteService.getSite();
+			request.getServletContext().setAttribute("sitevo", siteVo);
 		}
 //		2023.02.07 내가 짠 코드
 //		SiteVo site = siteService.getSite();
