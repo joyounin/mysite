@@ -1,5 +1,3 @@
-lines (23 sloc)  528 Bytes
-
 [src/main/java]
 	com
 	 |--- douzone
@@ -11,6 +9,10 @@ lines (23 sloc)  528 Bytes
 	 |		|		|		|     |--- DBConfig.java
 	 |		|		|		|     |--- MyBatisConfig.java
 	 |		|		|		|--- web
+	 |		|		|		|     |--- MvcConfig.java
+	 |		|		|		|     |--- SecurityConfig.java
+	 |		|		|		|     |--- MessageResourceConfig.java
+	 |		|		|		|     |--- FileuploadConfig.java
 	 |		|		|--- controller
 	 |		|		|--- service
 	 |		|		|--- repository
@@ -19,9 +21,14 @@ lines (23 sloc)  528 Bytes
 	com
 	 |--- douzone
 	 |		|--- mysite
-	 |		|		|--- mybatis
-	 |		|		|		|--- configuration.xml
-	 |		|		|		|--- mappers
-	 |		|		|		|		|--- board.xml
-	 |		|		|		|		|--- user.xml
-	 
+	 |		|		|--- app
+	 |		|		|	|--- jdbc.properties
+	 |		|		|	|--- mybatis
+	 |		|		|	|		|--- configuration.xml
+	 |		|		|	|		|--- mappers
+	 |		|		|	|		|	|--- board.xml
+	 |		|		|	|		|	|--- user.xml
+	 |		|		|---web
+	 |		|		|	|--- messages
+	 |		|		|	|		|--- messages_ko.properties
+	 |		|		|	|		|--- messages_en.properties
