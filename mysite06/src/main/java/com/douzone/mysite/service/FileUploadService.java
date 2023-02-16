@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +20,7 @@ public class FileUploadService {
 		String url = null;
 		
 		try {
-			File uploadDirectory = new File("/mysite-uploads/upload-images");
+			File uploadDirectory = new File(SAVE_PATH);
 			if(!uploadDirectory.exists()) {
 				uploadDirectory.mkdirs();
 			}
