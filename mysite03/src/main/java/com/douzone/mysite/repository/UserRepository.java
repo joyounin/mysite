@@ -27,7 +27,9 @@ public class UserRepository {
 		// sql의 아이디가 들어간다
 		return sqlSession.selectOne("user.findByEmailAndPassword", map);
 	}
-	
+	public UserVo findByEmail(String email) {
+		return sqlSession.selectOne("user.findByEmail", email);
+	}
 	public UserVo findByNo(Long no) {
 		return sqlSession.selectOne("user.findByNo", no);
 	}
@@ -35,4 +37,6 @@ public class UserRepository {
 	public void update(UserVo vo) {
 		sqlSession.update("user.update", vo);
 	}
+
+	
 }
