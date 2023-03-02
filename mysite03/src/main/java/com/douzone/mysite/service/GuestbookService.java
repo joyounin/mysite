@@ -23,6 +23,10 @@ public class GuestbookService {
 	public void addMessage(GuestbookVo vo) {
 		guestbookRepository.insert(vo);
 	}
+
+	public List<GuestbookVo> getMessageList(Long startNo) {
+		return guestbookRepository.findStartNo(startNo);
+	}
 	
 	
 }

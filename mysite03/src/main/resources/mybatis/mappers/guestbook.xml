@@ -15,13 +15,34 @@
 		  order by no desc
 		]]>
 	</select>
-	
+	<select id="findStartNo" resultMap="findAlllist" parameterType="long">
+		<choose>
+			<when test='startNo == 0 or startNo == null'>
+				<![CDATA[
+				 select no, name, password, message
+    			   from guestbook
+			   order by no desc
+  			      limit 0, 5
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+					  select no, name, password, message
+	    				from guestbook 
+	   				   where no < #{startNo }
+					order by no desc
+	   				   limit 0, 5
+   				]]>
+			</otherwise>
+		</choose>
+	</select>
 	<insert id="insert" parameterType="guestbookvo">
 		<![CDATA[
 			insert 
 			  into guestbook 
 		    values(null, #{name }, #{password }, #{message }, now())
 		]]>
+		
 		<selectKey keyProperty="no" resultType="long" order="AFTER">
 			<![CDATA[
 			select last_insert_id()

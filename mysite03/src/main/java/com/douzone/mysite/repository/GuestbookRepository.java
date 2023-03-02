@@ -28,6 +28,10 @@ public class GuestbookRepository {
 		Map<String, Object> map = Map.of("no", no, "password", password);
 		return sqlSession.delete("guestbook.deleteByPassword", map);
 	}
+
+	public List<GuestbookVo> findStartNo(Long startNo) {
+		return sqlSession.selectList("guestbook.findStartNo", startNo);
+	}
 	
 	
 }
