@@ -30,7 +30,7 @@ public class GuestbookController {
 	@GetMapping("")
 	public JsonResult list(@RequestParam(value="sno", required=true, defaultValue="0") Long startNo) {
 		List<GuestbookVo> list = guestbookService.getMessageList(startNo);
-		System.out.println(list);
+		System.out.println(startNo);
 		return JsonResult.success(list);
 	}
 	
@@ -45,9 +45,7 @@ public class GuestbookController {
 	// delete
 	@DeleteMapping("/{no}")
 	public JsonResult delete(@PathVariable("no") Long no, @RequestParam(value="password", required=true, defaultValue="") String password) {
-		guestbookService.deleteMessage(no, password);
-		return JsonResult.success(no);
+		return JsonResult.success(guestbookService.deleteMessage(no, password));
 	}
-	
 	
 }

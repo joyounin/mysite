@@ -79,7 +79,7 @@ $(function(){
 	        return;
 	    }
 
-	 // 2. 이메일 유효성 체크
+	 	// 3. 이메일 유효성 체크
 	    if ($('#tx-content').val() === '') {
 	      	messageBox("Guestbook", '내용이 비어 있습니다.', function(){
 	      		$('#tx-content').focus();
@@ -129,17 +129,26 @@ $(function(){
 						if(response.result === 'fail') {
 							console.error(response.message);
 							return;
-						}
+						}	
+						if(!response.data){
 							$("#dialog-delete")[0].reset();
-							$("#list-guestbook li[data-no=" + response.data + "]").remove();
+							$("#dialog-delete-form p.validateTips.error").show();
+							return;
+						}
+							$("#list-guestbook li[data-no=" + no + "]").remove();
 							$dialogDelete.dialog('close');
 					}
+
 				});
 			},
 			"취소": function() {
 				console.log("삭제 다이알로그의 폼 데이터 리셋하기");
+				$("#dialog-delete")[0].reset();
 				$(this).dialog('close');
 			}
+		},
+		close: function(){
+			$("#dialog-delete")[0].reset();
 		}
 	});
 	
