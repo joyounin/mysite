@@ -16,7 +16,7 @@
 		 where email = #{e }
 		   and password = password(#{p })
 		]]>	   
-	</select>
+	</select> 
 	
 	<select id="findByNo" resultType="uservo" parameterType="long">
 		<![CDATA[
