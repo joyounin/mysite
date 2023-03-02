@@ -14,5 +14,7 @@ public class GuestbookController {
 	private GuestbookService guestbookService;
 	
 	// 3개의 메소드 핸들러
+	// 글쓰기(GET), 글삭제(DELETE), 리스트(GET)
+	
 	
 }
