@@ -30,7 +30,7 @@ public class GuestbookController {
 		System.out.println(vo);
 		guestbookService.addMessage(vo);
 		System.out.println(vo);
-		return "redirect:/guestbook/list";
+		return "redirect:/guestbook/";
 	}
 	@RequestMapping(value="/delete", method=RequestMethod.GET )
 	public String delete(@RequestParam("no") Long no, Model model) {
@@ -40,7 +40,7 @@ public class GuestbookController {
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	public String delete(@RequestParam("no") Long no, @RequestParam("password") String password) {
 		guestbookService.deleteMessage(no, password);
-		return "redirect:/guestbook/list";
+		return "redirect:/guestbook/";
 	}
 	@RequestMapping("/spa")
 	public String indexspa() {

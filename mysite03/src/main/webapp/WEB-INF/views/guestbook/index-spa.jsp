@@ -24,7 +24,20 @@ var render = function(vo, model){
 	$("#list-guestbook")[model ? "prepend":"append"](htmls);
 	
 }
-
+var messageBox = function(title, message, callback){
+	$("#dialog-message p").text(message);
+	$("#dialog-message").attr("title", title).dialog({
+		width: 340,
+		height: 170,
+		modal: true,
+		buttons: {
+			"확인": function(){
+				$(this).dialog('close');
+			}
+		},
+		close: callback
+	});
+}
 var fetch = function(){
 	var lastli = $("#list-guestbook li:last-child").data("no");
 	if(lastli == null){
@@ -50,7 +63,29 @@ var fetch = function(){
 $(function(){
 	$("#add-form").submit(function(){
 		event.preventDefault();
-		
+		//1. 이름 유효성 체크
+		if ($("#input-name").val() === '') {
+			messageBox("Guestbook", "이름이 비어 있습니다.", function(){
+				$("#input-name").focus();
+			});
+			return;
+		}
+	
+		// 2. 비밀번호 유효성 체크
+	    if ($('#input-password').val() === '') {
+	      	messageBox("Guestbook", '비밀번호가 비어 있습니다.', function(){
+	      		$('#input-password').focus();
+	      	});
+	        return;
+	    }
+
+	 // 2. 이메일 유효성 체크
+	    if ($('#tx-content').val() === '') {
+	      	messageBox("Guestbook", '내용이 비어 있습니다.', function(){
+	      		$('#tx-content').focus();
+	      	});
+	        return;
+	    }
 		// form serialization
 		var vo = {};
 		vo.name = $("#input-name").val();
@@ -70,6 +105,7 @@ $(function(){
 					return;
 				}
 				render(response.data, true);
+				$("#add-form")[0].reset();
 			}
 		});
 	});
@@ -82,19 +118,21 @@ $(function(){
 		modal: true,
 		buttons: {
 			"삭제": function() {
+				var no = $("#hidden-no").val();
+				var password = $("#password-delete").val();
 				$.ajax({
-					url: "${pageContext.request.contextPath}/guestbook/api/" + $("#hidden-no").val(),
+					url: "${pageContext.request.contextPath}/guestbook/api/" + no,
 					type: "delete",
 					dataType: "json",
+					data: "password=" + password,
 					success: function(response) { 
 						if(response.result === 'fail') {
 							console.error(response.message);
 							return;
 						}
-						//console.log($("#hidden-no").attr('value'));
-						response.data.forEach(function(vo){
-							render(vo);
-						});
+							$("#dialog-delete")[0].reset();
+							$("#list-guestbook li[data-no=" + response.data + "]").remove();
+							$dialogDelete.dialog('close');
 					}
 				});
 			},
@@ -112,7 +150,20 @@ $(function(){
 		$("#hidden-no").val($(this).data("no"));
 		$dialogDelete.dialog('open');
 	});
-	
+$(function(){
+	$(window).scroll(function(){
+		var $window = $(this);
+		var $document = $(document);
+					
+		var windowHeight = $window.height();
+		var documentHeight = $document.height();
+		var scrollTop = $window.scrollTop();
+		
+		if(documentHeight < windowHeight + scrollTop + 10){
+			fetch();
+		}
+	});
+});
 // 최초 리스트 가져오기
 fetch();
 });
@@ -135,7 +186,7 @@ fetch();
 			<div id="dialog-delete-form" title="메세지 삭제" style="display:none">
   				<p class="validateTips normal">작성시 입력했던 비밀번호를 입력하세요.</p>
   				<p class="validateTips error" style="display:none">비밀번호가 틀립니다.</p>
-  				<form>
+  				<form id="dialog-delete">
  					<input type="password" id="password-delete" value="" class="text ui-widget-content ui-corner-all">
 					<input type="hidden" id="hidden-no" value="">
 					<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
