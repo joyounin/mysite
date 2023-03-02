@@ -43,7 +43,7 @@ public class GuestbookController {
 	}
 //
 	// delete
-	@DeleteMapping("{no}")
+	@DeleteMapping("/{no}")
 	public JsonResult delete(@PathVariable("no") Long no, @RequestParam(value="password", required=true, defaultValue="") String password) {
 		guestbookService.deleteMessage(no, password);
 		return JsonResult.success(no);

@@ -73,37 +73,38 @@ $(function(){
 			}
 		});
 	});
-	
+});
+
+$(function(){
 	// 삭제 다이알로그 jQuery 객체 미리 만들기
 	var $dialogDelete = $("#dialog-delete-form").dialog({
 		autoOpen: false,
 		modal: true,
-		buttons:{
-			"삭제": function(){
-				// ajax 사용
-				console.log("삭제하기");
+		buttons: {
+			"삭제": function() {
 				$.ajax({
-					url: "${pageContext.request.contextPath}/guestbook/api/" + $("#hidden-no").attr('value'),
+					url: "${pageContext.request.contextPath}/guestbook/api/" + $("#hidden-no").val(),
 					type: "delete",
 					dataType: "json",
-					success: function(response){
-						if(response.result === 'fail'){
+					success: function(response) { 
+						if(response.result === 'fail') {
 							console.error(response.message);
 							return;
 						}
-						console.log(response.data+"kkk");
-						//response.data.forEach(function(vo){
-						//	render(vo);
-						//})
+						//console.log($("#hidden-no").attr('value'));
+						response.data.forEach(function(vo){
+							render(vo);
+						});
 					}
 				});
 			},
-			"취소": function(){
+			"취소": function() {
 				console.log("삭제 다이알로그의 폼 데이터 리셋하기");
 				$(this).dialog('close');
 			}
 		}
 	});
+	
 	// 메세지 삭제 버튼 click 이벤트 처리(Live Event)
 	$(document).on('click', "#list-guestbook li", function(event){
 		event.preventDefault();
