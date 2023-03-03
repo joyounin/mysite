@@ -11,19 +11,15 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/ejs/ejs.js"></script>
 <script>
-var render = function(vo, model){
-	var htmls = 
-		"<li data-no='" + vo.no + "'>" +
-		" <strong>"+ vo.name +"</strong>" +
-		" <p>" + vo.message + "</p>" +
-		" <strong></strong>" +
-		" <a href='' data-no='" + vo.no + "'>삭제</a>" +
-		"</li>";
-	
-	$("#list-guestbook")[model ? "prepend":"append"](htmls);
-	
-}
+var listItemTemplate = new EJS({
+	url: "${pageContext.request.contextPath }/assets/js/ejs/list-item-template.ejs"
+});
+// 리스트 형식의 EJS
+var listTemplate = new EJS({
+	url: "${pageContext.request.contextPath }/assets/js/ejs/list-template.ejs"
+});
 var messageBox = function(title, message, callback){
 	$("#dialog-message p").text(message);
 	$("#dialog-message").attr("title", title).dialog({
@@ -53,9 +49,11 @@ var fetch = function(){
 				return;
 			}
 
-			response.data.forEach(function(vo){
-				render(vo);
-			})
+			//response.data.forEach(function(vo){
+			//	render(vo);
+			//})
+			var htmls = listTemplate.render(response);
+			$("#list-guestbook").append(htmls);
 		}
 	});
 }
@@ -104,7 +102,13 @@ $(function(){
 					console.error(response.message);
 					return;
 				}
-				render(response.data, true);
+				
+				// render(response.data, true);
+				// EJS로 실행
+				var htmls = listItemTemplate.render(response.data);
+				$("#list-guestbook").prepend(htmls);
+				
+				
 				$("#add-form")[0].reset();
 			}
 		});
@@ -149,6 +153,7 @@ $(function(){
 		},
 		close: function(){
 			$("#dialog-delete")[0].reset();
+			$("#dialog-delete-form p.validateTips.error").hide();
 		}
 	});
 	
